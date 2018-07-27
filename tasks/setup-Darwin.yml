@@ -6,7 +6,7 @@
 
 - name: Download DMG package to local dir
   get_url:
-    url: "{{ qualys_mac_app }}"
+    url: "{{ qualys_mac_app_url }}"
     dest: "{{ qualys_mac_dest }}"
     force: no
     mode: 644
@@ -15,6 +15,12 @@
 
 - name: Install Qualys Agent on the machine
   shell: 'installer -verbose -dumplog -allowUntrusted -pkg "{{ qualys_mac_dest }}"/"{{ package_name }}".pkg -target /'
+  args:
+    warn: no
+  when: qualys_installed.stat.exists == False
+
+- name: Activate and spin up Qualys Agent on the machine
+  shell: 'bash -c " /Applications/QualysCloudAgent.app/Contents/MacOS/qualys-cloud-agent.sh ActivationId="{{ ActivationId }}" CustomerId="{{ CustomerId }}""'
   args:
     warn: no
   when: qualys_installed.stat.exists == False
