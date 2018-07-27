@@ -1,7 +1,6 @@
 ---
-# tasks file for ansible-qualys-cloud-agent
-- name: Install the agent
-  yum:
-    name: "{{ qualys_agent_repository_uri }}"
-    state: state: "{{ 'latest' if qualys_agent_pkg_state_latest else 'present' }}"
-  when: ansible_pkg_mgr == 'yum'
+- include_tasks: setup-Windows.yml
+  when: ansible_os_family == 'Windows'
+
+- include_tasks: setup-Darwin.yml
+  when: ansible_os_family == 'Darwin'

@@ -1,0 +1,20 @@
+---
+- name: Check for existing Qualys Agent installation.
+  stat:
+    path: /Applications/QualysCloudAgent.app
+  register: qualys_installed
+
+- name: Download DMG package to local dir
+  get_url:
+    url: "{{ qualys_mac_app }}"
+    dest: "{{ qualys_mac_dest }}"
+    force: no
+    mode: 644
+  become: no
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Install Qualys Agent on the machine
+  shell: 'installer -verbose -dumplog -allowUntrusted -pkg "{{ qualys_mac_dest }}"/"{{ package_name }}".pkg -target /'
+  args:
+    warn: no
+  when: qualys_installed.stat.exists == False

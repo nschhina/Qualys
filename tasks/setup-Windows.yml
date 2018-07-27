@@ -1,0 +1,25 @@
+---
+- name: Check for existing Qualts Agent installation.
+  win_stat:
+    path: "C:\\Program Files (x86)\\Qualys"
+  register: zscaler_installed
+
+- name: Download exe to local directory.
+  win_get_url:
+    url: "{{ qualys_windows_exe_url }}"
+    dest: "{{ qualys_windows_dest }}"
+    force: no
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Install Qualys Agent on the machine
+  win_package:
+    path: "{{ qualys_windows_dest }}"
+    productid: auto
+    state: present
+    arguments:
+    - CustomerId="{{ '{'CustomerId'}' }}"
+    - ActivationId="{{ '{'ActivationId'}' }}"
+    - /install
+    - /passive
+    - /norestart
+    ignore_errors: "{{ ansible_check_mode }}"

@@ -1,5 +1,14 @@
 ---
-# defaults file for ansible-qualys-cloud-agent
-qualys_agent_pkg_state_latest: no
-qualys_agent_repository_uri: ''
-...
+## Mac Variables to be set
+qualys_mac_app_url: ""
+qualys_mac_dest: "~"
+
+## Required Variables
+ansible_check_mode: no
+package_name: "qualys"
+ActivationId: ""
+CustomerId: ""
+
+## Windows Variables to be set
+qualys_windows_exe_url: ""
+qualys_windows_dest: ""
